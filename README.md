@@ -48,6 +48,8 @@ The current public beta runs on **Windows 10 22H2 and Windows 11**.
 - Remembers application routes across Adufa and application restarts.
 - Returns an application to `System default` with one selection.
 - Changes current per-application volume and mute state.
+- On supported Windows 11 builds, right-click an audible taskbar app to open
+  experimental output, volume, and mute controls beside the native menu.
 - Includes **Find sound**, a temporary live view that highlights the loudest application.
 - Opens a quick selector near the cursor with `Ctrl + Alt + A`.
 - Can start when you sign in; this remains off until you enable it.
@@ -256,6 +258,9 @@ cargo fmt --all -- --check
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace
 ```
+
+To regenerate the committed icon package and documentation GIF, see
+[scripts/README.md](scripts/README.md).
 
 One live Windows audio-session round-trip test is ignored by default because it
 changes a real session temporarily. Run it only on a development machine with an

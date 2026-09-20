@@ -4,4 +4,6 @@ src/csharp/obj/
 src/rust/target/
 /target/
 .tmp/
+__pycache__/
+*.py[cod]
 

@@ -48,6 +48,9 @@ La bêta publique actuelle fonctionne sous **Windows 10 22H2 et Windows 11**.
 - Mémorise les routages après le redémarrage d'Adufa ou de l'application.
 - Rétablit une application sur `Sortie système par défaut` (`System default`) en une sélection.
 - Modifie le volume actuel et l'état muet de chaque application.
+- Sur les versions compatibles de Windows 11, faites un clic droit sur une
+  application audible dans la barre des tâches pour ouvrir des commandes
+  expérimentales de sortie, volume et muet à côté du menu natif.
 - Inclut **Localiser le son** (`Find sound`), une vue temporaire en direct qui met en évidence l'application la plus forte.
 - Ouvre un sélecteur rapide près du pointeur avec `Ctrl + Alt + A`.
 - Peut démarrer à l'ouverture de session ; cette option reste désactivée tant que vous ne l'activez pas.

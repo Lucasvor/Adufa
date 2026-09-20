@@ -48,6 +48,9 @@ O beta público atual funciona no **Windows 10 22H2 e Windows 11**.
 - Memoriza as rotas dos aplicativos após reiniciar o Adufa ou o próprio aplicativo.
 - Devolve um aplicativo a `Padrão do sistema` (`System default`) com uma seleção.
 - Altera o volume atual por aplicativo e o estado de mudo.
+- Em versões compatíveis do Windows 11, clique com o botão direito em um aplicativo
+  audível na barra de tarefas para abrir controles experimentais de saída, volume e
+  mudo ao lado do menu nativo.
 - Inclui **Encontrar som** (`Find sound`), uma visualização temporária ao vivo que destaca o aplicativo com áudio mais alto.
 - Abre um seletor rápido perto do cursor com `Ctrl + Alt + A`.
 - Pode iniciar com a sessão do usuário; essa opção permanece desativada até você habilitá-la.

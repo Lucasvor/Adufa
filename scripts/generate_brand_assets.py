@@ -1,8 +1,8 @@
 """Generate Adufa's raster icon package and README demonstration GIF.
 
-The frames are drawn from the same dimensions and labels as the native compact
-popup.  Keeping the demo deterministic makes documentation updates reviewable
-and avoids committing a screen recording with personal desktop content.
+The frames reproduce the native compact popup, output selector, and taskbar
+companion without including a personal desktop capture. Keeping the demo
+deterministic makes documentation updates reviewable.
 """
 
 from __future__ import annotations
@@ -75,6 +75,28 @@ def app_dot(draw: ImageDraw.ImageDraw, x: int, y: int, color: str, letter: str) 
     label(draw, (x, y+1), letter, 10, "#101318", True, "mm")
 
 
+def application_icon(draw: ImageDraw.ImageDraw, x: int, y: int, kind: str) -> None:
+    if kind == "library":
+        draw.rounded_rectangle(((x-11)*SCALE, (y-8)*SCALE, (x+11)*SCALE, (y+8)*SCALE), 2*SCALE, fill="#F2F6FB")
+        draw.rectangle(((x-8)*SCALE, (y-6)*SCALE, (x-3)*SCALE, (y+6)*SCALE), fill="#315B8D")
+        draw.rectangle(((x-1)*SCALE, (y-5)*SCALE, (x+8)*SCALE, (y-2)*SCALE), fill="#C2CFDC")
+        draw.rectangle(((x-1)*SCALE, (y+1)*SCALE, (x+8)*SCALE, (y+4)*SCALE), fill="#C2CFDC")
+    elif kind == "voicemeeter":
+        draw.rounded_rectangle(((x-11)*SCALE, (y-9)*SCALE, (x+11)*SCALE, (y+9)*SCALE), 2*SCALE, fill="#A93D3D")
+        label(draw, (x, y-2), "VOICE", 5, "#FFFFFF", True, "mm")
+        label(draw, (x, y+5), "METER", 4, "#FFFFFF", True, "mm")
+    elif kind == "chrome":
+        draw.ellipse(((x-11)*SCALE, (y-11)*SCALE, (x+11)*SCALE, (y+11)*SCALE), fill="#EEC13E")
+        draw.pieslice(((x-11)*SCALE, (y-11)*SCALE, (x+11)*SCALE, (y+11)*SCALE), 120, 240, fill="#D9544D")
+        draw.pieslice(((x-11)*SCALE, (y-11)*SCALE, (x+11)*SCALE, (y+11)*SCALE), 240, 360, fill="#4CA06A")
+        draw.ellipse(((x-5)*SCALE, (y-5)*SCALE, (x+5)*SCALE, (y+5)*SCALE), fill="#4385E5")
+    elif kind == "zen":
+        draw.ellipse(((x-10)*SCALE, (y-10)*SCALE, (x+10)*SCALE, (y+10)*SCALE), outline="#B8B8B2", width=2*SCALE)
+        draw.ellipse(((x-5)*SCALE, (y-5)*SCALE, (x+5)*SCALE, (y+5)*SCALE), outline="#8D938C", width=2*SCALE)
+    else:
+        app_dot(draw, x, y, "#1ED760", "S")
+
+
 def check_icon(draw: ImageDraw.ImageDraw, x: int, y: int, color: str = ACCENT) -> None:
     line(draw, [(x-5, y), (x-1, y+4), (x+6, y-5)], color, 2)
 
@@ -94,23 +116,28 @@ def power_icon(draw: ImageDraw.ImageDraw, x: int, y: int) -> None:
     line(draw, [(x, y-9), (x, y)], ACCENT, 2)
 
 
+def locator_icon(draw: ImageDraw.ImageDraw, x: int, y: int) -> None:
+    speaker_icon(draw, x-4, y)
+    draw.arc(((x-2)*SCALE, (y-7)*SCALE, (x+10)*SCALE, (y+7)*SCALE), 300, 60, fill=ACCENT, width=SCALE)
+
+
 def popup(draw: ImageDraw.ImageDraw, x: int, y: int, selected: int | None = None) -> None:
     box(draw, (x, y, x+304, y+328), 10, PANEL, LINE)
-    brand_mark(draw, (x+14, y+11), 0.46, False)
+    speaker_icon(draw, x+24, y+29)
     label(draw, (x+50, y+22), "Adufa", 16, TEXT, True, "lm")
     label(draw, (x+50, y+41), "Audio router", 12, MUTED, False, "lm")
-    label(draw, (x+220, y+28), "Find sound", 12, MUTED, False, "mm")
+    locator_icon(draw, x+202, y+28)
+    label(draw, (x+220, y+28), "Find sound", 12, MUTED, False, "lm")
     line(draw, [(x+14, y+58), (x+290, y+58)], LINE, 1)
-    apps = [("V", "voicemeeter", "#E65353"), ("C", "chrome", "#F3C84B"), ("Z", "zen", "#8D938C"), ("S", "Spotify", "#1ED760")]
-    for index, (letter, name, color) in enumerate(apps):
+    apps = [("library", "LibraryServer"), ("voicemeeter", "voicemeeter"), ("chrome", "chrome"), ("zen", "zen")]
+    for index, (kind, name) in enumerate(apps):
         top = y + 68 + index * 44
         if selected == index:
             draw.rectangle((x+8*SCALE, top*SCALE, (x+296)*SCALE, (top+40)*SCALE), fill=ACCENT_BG)
             draw.rectangle((x+8*SCALE, top*SCALE, (x+11)*SCALE, (top+40)*SCALE), fill=ACCENT)
-        app_dot(draw, x+27, top+20, color, letter)
+        application_icon(draw, x+27, top+20, kind)
         label(draw, (x+48, top+20), name, 13, TEXT, False, "lm")
-        output = "Headphones" if name == "Spotify" else "System default"
-        label(draw, (x+270, top+20), output, 11, MUTED, False, "rm")
+        label(draw, (x+270, top+20), "System default", 11, MUTED, False, "rm")
         label(draw, (x+284, top+20), "›", 16, MUTED, False, "mm")
     divider = y + 246
     line(draw, [(x+14, divider), (x+290, divider)], LINE, 1)
@@ -137,7 +164,7 @@ def native_menu(draw: ImageDraw.ImageDraw, x: int, y: int) -> None:
 
 def selector(draw: ImageDraw.ImageDraw, x: int, y: int, volume: int = 72, choice: int = 4) -> None:
     box(draw, (x, y, x+250, y+322), 10, PANEL, LINE)
-    app_dot(draw, x+24, y+25, "#1ED760", "S")
+    application_icon(draw, x+24, y+25, "spotify")
     label(draw, (x+47, y+25), "Spotify", 14, TEXT, True, "lm")
     line(draw, [(x+12, y+48), (x+238, y+48)], LINE, 1)
     speaker_icon(draw, x+18, y+75)
@@ -155,6 +182,14 @@ def selector(draw: ImageDraw.ImageDraw, x: int, y: int, volume: int = 72, choice
             draw.rectangle(((x+8)*SCALE, (yy-16)*SCALE, (x+242)*SCALE, (yy+16)*SCALE), fill="#30353D")
             check_icon(draw, x+17, yy)
         label(draw, (x+34, yy), output, 12, TEXT, False, "lm")
+
+
+def taskbar(draw: ImageDraw.ImageDraw) -> None:
+    draw.rectangle((342*SCALE, 428*SCALE, 884*SCALE, 478*SCALE), fill="#20242A")
+    for index, kind in enumerate(["chrome", "spotify", "zen"]):
+        x = 500 + index * 48
+        application_icon(draw, x, 452, kind)
+        draw.rounded_rectangle(((x-12)*SCALE, 470*SCALE, (x+12)*SCALE, 473*SCALE), SCALE, fill="#B8CBE7" if kind == "spotify" else "#596575")
 
 
 def cursor(draw: ImageDraw.ImageDraw, x: int, y: int) -> None:
@@ -181,18 +216,21 @@ def scene(kind: int, progress: float) -> Image.Image:
         popup(draw, 461, 88, None)
         cursor(draw, int(748 - progress*52), int(445 - progress*145))
     elif kind == 1:
-        native_menu(draw, 360, 95)
-        selector(draw, 616, 78, 72, 4)
-        cursor(draw, int(555 + progress*105), int(342 - progress*108))
+        native_menu(draw, 360, 88)
+        selector(draw, 616, 88, 72, 4)
+        taskbar(draw)
+        cursor(draw, int(548 + progress*105), int(426 - progress*92))
     elif kind == 2:
-        native_menu(draw, 360, 95)
-        selector(draw, 616, 78, int(45 + progress*35), 4)
-        cursor(draw, int(698 + progress*70), 150)
+        native_menu(draw, 360, 88)
+        selector(draw, 616, 88, int(45 + progress*35), 4)
+        taskbar(draw)
+        cursor(draw, int(698 + progress*70), 160)
     else:
-        native_menu(draw, 360, 95)
+        native_menu(draw, 360, 88)
         choice = 4 if progress < 0.6 else 1
-        selector(draw, 616, 78, 80, choice)
-        cursor(draw, 706, int(342 - progress*132))
+        selector(draw, 616, 88, 80, choice)
+        taskbar(draw)
+        cursor(draw, 706, int(350 - progress*132))
     label(draw, (611, 492), "LOCAL ONLY  •  NO TELEMETRY", 10, "#697585", True, "mm")
     return image.resize((900, 520), Image.Resampling.LANCZOS)
 

@@ -1,8 +1,8 @@
 # Production architecture
 
 This document is the authoritative implementation map for the production
-application. The code under `src/csharp` and `src/rust` remains benchmark code;
-it is evidence, not the starting shape of the product.
+application. The repository contains the product source, release automation, and
+documentation only; obsolete implementation experiments are not shipped.
 
 ## Goals
 
@@ -101,11 +101,7 @@ shape is shown here so names and dependency direction remain stable.
 |   `-- references/               # approved screenshots and interaction specs
 |-- locales/
 |   `-- en-US.json                # initial and fallback catalog
-|-- tests/                        # cross-adapter fixtures only when needed
-`-- experiments/
-    |-- csharp-core-audio/        # moved current C# benchmark
-    |-- rust-core-audio/          # moved current Rust benchmark
-    `-- benchmark.ps1
+`-- tests/                        # cross-adapter fixtures only when needed
 ```
 
 Do not split `router-engine` into domain/application/config crates until an
@@ -378,9 +374,7 @@ Every `unsafe` block has an adjacent `// SAFETY:` explanation covering pointer
 validity, lifetime, aliasing, thread rules, ownership, and the native contract being
 relied on. Keep unsafe code inside platform adapters and the C ABI bridge. Safe
 wrappers should own COM reference counts, callback unregistration, native strings,
-and handles so application logic cannot forget cleanup. Hand-written vtable index
-calls from the benchmark are not copied into production when maintained bindings
-can express the contract.
+and handles so application logic cannot forget cleanup.
 
 Review any unsafe callback for teardown races and any audio-thread code for real-
 time safety. Warnings are denied in CI. Formatting, linting, and tests are required
@@ -399,34 +393,26 @@ across platforms, reactive state framework, general event bus, DI container,
 database, HTTP client, updater, crash SDK, or plugin loader for the first release.
 Native callbacks plus the standard channels and OS wake mechanisms are sufficient.
 
-The Windows production adapter should use maintained Rust Windows bindings with
-only required features instead of preserving the benchmark's manual COM layouts.
-Linux uses PipeWire's supported C interface through maintained bindings. macOS uses
-Apple frameworks with the smallest maintained binding surface that satisfies the
-implementation. The Linux shell-library decision requires its own measured ADR
-because there is no single desktop-native UI stack.
+The Windows production adapter uses maintained Rust Windows bindings with only
+the required features. Linux uses PipeWire's supported C interface through
+maintained bindings. macOS uses Apple frameworks with the smallest maintained
+binding surface that satisfies the implementation. The Linux shell-library
+decision requires its own measured ADR because there is no single desktop-native
+UI stack.
 
-## Migration from the current prototypes
+## Implementation sequence
 
-1. Preserve the current probes and benchmark outputs under `experiments/`; do not
-   import their command-line protocol or manual COM wrappers into production.
-2. Create the workspace with only `router-engine` and the Windows application.
-   Implement domain identifiers, commands, snapshots, config recovery, and a
-   scripted adapter test before native routing mutation.
-3. Build the maintained-bindings Windows adapter from the proven enumeration,
-   session, volume, mute, and callback behavior. Add capability reporting and
-   clean callback teardown.
-4. Add the Win32 tray host and compact popup, then the expanded mixer. Keep drawing
-   resources lazy and benchmark closed-popup idle cost after each vertical slice.
-5. Prove persistent Windows application routing separately. If it requires an
-   undocumented mechanism, report the capability unavailable and seek a supported
-   design; do not bury the risk behind the adapter.
-6. Build a macOS routing feasibility spike, including permissions and real-time
+1. Keep the Rust workspace limited to `router-engine` and the platform hosts.
+2. Evolve the Windows beta through focused native integration tests, with routing,
+  volume, and device-change failures reported honestly.
+3. Keep drawing resources lazy and measure closed-popup idle cost after each
+  substantial Windows feature.
+4. Build a macOS routing feasibility spike, including permissions and real-time
    constraints. Choose direct Rust bindings or one tiny Swift shim per the ABI
    policy, then add the AppKit shell and universal packaging.
-7. Build a measured Linux shell spike, implement PipeWire routing, and validate one
+5. Build a measured Linux shell spike, implement PipeWire routing, and validate one
    Wayland and one X11 desktop before choosing the shell library.
-8. Move only shared fixtures that have two consumers into root `tests/`. Keep each
+6. Move only shared fixtures that have two consumers into root `tests/`. Keep each
    platform's native integration tests beside that platform.
 
 Each step must leave one working vertical path and updated measurements. Directory

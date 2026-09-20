@@ -48,6 +48,9 @@ La beta pública actual funciona en **Windows 10 22H2 y Windows 11**.
 - Recuerda las rutas de las aplicaciones cuando se reinician Adufa o la aplicación.
 - Devuelve una aplicación a `Predeterminado del sistema` (`System default`) con una sola selección.
 - Cambia el volumen actual y el estado de silencio de cada aplicación.
+- En versiones compatibles de Windows 11, haz clic con el botón derecho en una
+  aplicación audible de la barra de tareas para abrir controles experimentales de
+  salida, volumen y silencio junto al menú nativo.
 - Incluye **Buscar sonido** (`Find sound`), una vista temporal en directo que resalta la aplicación con mayor volumen.
 - Abre un selector rápido junto al cursor con `Ctrl + Alt + A`.
 - Puede iniciarse al abrir sesión; esta opción permanece desactivada hasta que la habilites.

@@ -48,6 +48,9 @@ L'attuale beta pubblica funziona su **Windows 10 22H2 e Windows 11**.
 - Ricorda gli instradamenti delle applicazioni dopo il riavvio di Adufa o dell'applicazione.
 - Riporta un'applicazione a `Predefinito di sistema` (`System default`) con una sola selezione.
 - Modifica il volume corrente e lo stato di disattivazione audio per applicazione.
+- Nelle versioni supportate di Windows 11, fai clic con il pulsante destro su
+  un'app udibile nella barra delle applicazioni per aprire i controlli sperimentali
+  di uscita, volume e disattivazione audio accanto al menu nativo.
 - Include **Trova suono** (`Find sound`), una vista temporanea in tempo reale che evidenzia l'applicazione più rumorosa.
 - Apre un selettore rapido vicino al puntatore con `Ctrl + Alt + A`.
 - Può avviarsi all'accesso; l'opzione rimane disattivata finché non viene abilitata.

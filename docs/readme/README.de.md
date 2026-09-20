@@ -48,6 +48,9 @@ Die aktuelle öffentliche Beta läuft unter **Windows 10 22H2 und Windows 11**.
 - Merkt sich App-Routen über Neustarts von Adufa und der jeweiligen App hinweg.
 - Setzt eine App mit einer Auswahl auf `Systemstandard` (`System default`) zurück.
 - Ändert die aktuelle Lautstärke und Stummschaltung pro App.
+- Auf unterstützten Windows-11-Versionen öffnet ein Rechtsklick auf eine hörbare
+  Taskleisten-App experimentelle Regler für Ausgang, Lautstärke und Stummschaltung
+  neben dem nativen Menü.
 - Enthält **Ton finden** (`Find sound`), eine temporäre Live-Ansicht, die die lauteste App hervorhebt.
 - Öffnet mit `Ctrl + Alt + A` eine Schnellauswahl nahe am Mauszeiger.
 - Kann bei der Anmeldung starten; die Option bleibt deaktiviert, bis sie eingeschaltet wird.
