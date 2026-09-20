@@ -1,0 +1,8 @@
+<!-- Hallmark · pre-emit critique: P5 H4 E4 S4 R5 V5 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title description">
+  <title id="title">Sulco gate icon exploration</title>
+  <desc id="description">A heavy open gate contains a single cut channel that bends toward the selected output.</desc>
+  <path d="M208 176H816C852 176 880 204 880 240V360H744V312H280V712H744V664H880V784C880 820 852 848 816 848H208C172 848 144 820 144 784V240C144 204 172 176 208 176Z" fill="oklch(20% 0.012 55)"/>
+  <path d="M280 512H430C522 512 532 392 636 392H824" fill="none" stroke="oklch(97% 0.008 80)" stroke-width="76" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M430 512C522 512 532 632 636 632H824" fill="none" stroke="oklch(58% 0.16 45)" stroke-width="76" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

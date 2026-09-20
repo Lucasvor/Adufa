@@ -1,0 +1,11 @@
+<!-- Hallmark · pre-emit critique: P5 H4 E4 S5 R5 V5 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title description">
+  <title id="title">Sulco dual-groove icon exploration</title>
+  <desc id="description">Two compact signal grooves cross through a precise switch without node circles or arrows.</desc>
+  <g fill="none" stroke-linecap="square" stroke-linejoin="round">
+    <path d="M180 288H398C474 288 500 384 544 448L690 672C722 722 766 736 844 736" stroke="oklch(20% 0.012 55)" stroke-width="108"/>
+    <path d="M180 736H398C474 736 500 640 544 576L690 352C722 302 766 288 844 288" stroke="oklch(20% 0.012 55)" stroke-width="108"/>
+    <path d="M180 288H398C474 288 500 384 544 448L690 672C722 722 766 736 844 736" stroke="oklch(58% 0.16 45)" stroke-width="30"/>
+    <path d="M180 736H398C474 736 500 640 544 576L690 352C722 302 766 288 844 288" stroke="oklch(97% 0.008 80)" stroke-width="30"/>
+  </g>
+</svg>

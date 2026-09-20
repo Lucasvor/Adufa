@@ -1,0 +1,7 @@
+artifacts/
+src/csharp/bin/
+src/csharp/obj/
+src/rust/target/
+/target/
+.tmp/
+

@@ -1,0 +1,3 @@
+# Rust core with progressive platform backends
+
+We will build the shared core and UI in Rust, with separate audio backends for Windows, macOS, and Linux. Windows ships first, macOS follows, and Linux follows after that; the architecture considers all three from the beginning, but functionality is exposed through explicit platform capabilities rather than forced parity. This keeps the public codebase portable without hiding real differences between Core Audio/WASAPI, macOS Core Audio, and PipeWire, and follows the prototype benchmark that showed Rust's lower binary and private-memory footprint.

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Adufa route mark</title>
+  <desc id="desc">A sound channel reaches a gate and is redirected toward the selected output.</desc>
+  <path d="M9 32H27L42 17H56" fill="none" stroke="#78AFFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M27 32L42 47H49" fill="none" stroke="#7C8796" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M49 41V53" fill="none" stroke="#7C8796" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="27" cy="32" r="4" fill="#EAF2FF"/>
+</svg>

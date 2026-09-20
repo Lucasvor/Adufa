@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">Adufa</title>
+  <desc id="desc">Adufa routes every application to the right audio device.</desc>
+  <rect width="1200" height="360" rx="28" fill="#111419"/>
+  <path d="M0 300C240 260 360 340 600 294S960 242 1200 282V360H0Z" fill="#171C24"/>
+  <g transform="translate(92 80)">
+    <rect width="200" height="200" rx="46" fill="#171A1F" stroke="#303640" stroke-width="3"/>
+    <path d="M38 100H87L128 59H164" fill="none" stroke="#78AFFF" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M87 100L128 141H147" fill="none" stroke="#7C8796" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M147 126V157" fill="none" stroke="#7C8796" stroke-width="12" stroke-linecap="round"/>
+    <circle cx="87" cy="100" r="10" fill="#EAF2FF"/>
+  </g>
+  <g font-family="Segoe UI Variable, Segoe UI, sans-serif">
+    <text x="344" y="156" fill="#F4F7FB" font-size="76" font-weight="700" letter-spacing="-2">Adufa</text>
+    <text x="348" y="211" fill="#B8C2CF" font-size="27" font-weight="400">Route every app to the right audio device.</text>
+    <g transform="translate(348 243)">
+      <rect width="146" height="38" rx="19" fill="#1D2735" stroke="#334258"/>
+      <circle cx="22" cy="19" r="5" fill="#78AFFF"/>
+      <text x="37" y="25" fill="#D9E8FF" font-size="16" font-weight="600">Windows beta</text>
+      <rect x="158" width="151" height="38" rx="19" fill="#171A1F" stroke="#303640"/>
+      <text x="179" y="25" fill="#AEB8C5" font-size="16">macOS planned</text>
+      <rect x="321" width="146" height="38" rx="19" fill="#171A1F" stroke="#303640"/>
+      <text x="344" y="25" fill="#AEB8C5" font-size="16">Linux planned</text>
+    </g>
+  </g>
+</svg>

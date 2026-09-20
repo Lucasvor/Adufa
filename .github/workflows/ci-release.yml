@@ -1,0 +1,107 @@
+name: CI and release
+
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "v*"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  validate:
+    name: Validate Rust workspace
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install Rust toolchain
+        shell: pwsh
+        run: rustup toolchain install stable --profile minimal --component clippy,rustfmt
+
+      - name: Select Rust toolchain
+        shell: pwsh
+        run: rustup default stable
+
+      - name: Check formatting
+        run: cargo fmt --all --check
+
+      - name: Run Clippy
+        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+
+      - name: Run tests
+        run: cargo test --workspace
+
+  build-windows:
+    name: Build Windows x64 portable executable
+    needs: validate
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install Rust toolchain and Windows x64 target
+        shell: pwsh
+        run: rustup toolchain install stable --profile minimal --target x86_64-pc-windows-msvc
+
+      - name: Select Rust toolchain
+        shell: pwsh
+        run: rustup default stable
+
+      - name: Build release executable
+        run: cargo build --release --locked --package router-windows --target x86_64-pc-windows-msvc
+
+      - name: Prepare portable executable
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path dist -Force | Out-Null
+          Copy-Item -LiteralPath "target\x86_64-pc-windows-msvc\release\router-windows.exe" -Destination "dist\Adufa-Windows-x64.exe"
+
+      - name: Upload portable executable
+        uses: actions/upload-artifact@v7
+        with:
+          name: Adufa-Windows-x64
+          path: dist/Adufa-Windows-x64.exe
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    name: Publish GitHub Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build-windows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download portable executable
+        uses: actions/download-artifact@v8
+        with:
+          name: Adufa-Windows-x64
+          path: dist
+
+      - name: Create release and attach executable
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: >-
+          gh release create "$RELEASE_TAG"
+          "dist/Adufa-Windows-x64.exe"
+          --repo "$GITHUB_REPOSITORY"
+          --verify-tag
+          --generate-notes
+          --title "Adufa $RELEASE_TAG"

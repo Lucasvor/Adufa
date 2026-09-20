@@ -1,0 +1,10 @@
+<!-- Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V4 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="title desc">
+  <title id="title">Cut channel monochrome 24 pixel optical master</title>
+  <desc id="desc">The selected route is wider and reaches the edge; the narrower alternate route ends at a stop.</desc>
+  <g fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter">
+    <path d="M1 12H9L15 6H23" stroke-width="4" />
+    <path d="M9 12L15.5 18.5H18.5" stroke-width="3" />
+    <path d="M18.5 15.5V21.5" stroke-width="3" />
+  </g>
+</svg>

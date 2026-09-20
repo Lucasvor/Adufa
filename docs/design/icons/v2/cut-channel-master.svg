@@ -1,0 +1,25 @@
+<!-- Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V4 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Cut channel full-size product mark</title>
+  <desc id="desc">A source channel follows a wide selected route to the upper output while a narrower alternate route ends at a perpendicular stop.</desc>
+  <style>
+    :root {
+      --mark-ink: #201914;
+      --mark-route: #b03f00;
+    }
+    .bed { fill: var(--mark-ink); }
+    .route { fill: none; stroke: var(--mark-route); stroke-width: 72; stroke-linecap: butt; stroke-linejoin: miter; }
+  </style>
+  <defs>
+    <mask id="channel-cut" maskUnits="userSpaceOnUse">
+      <rect width="1024" height="1024" fill="black" />
+      <path d="M104 512H430L666 276H920" fill="none" stroke="white" stroke-width="188" stroke-linecap="butt" stroke-linejoin="miter" />
+      <path d="M430 512L650 732H820" fill="none" stroke="white" stroke-width="112" stroke-linecap="butt" stroke-linejoin="miter" />
+      <path d="M820 654V810" fill="none" stroke="white" stroke-width="112" stroke-linecap="butt" />
+      <path d="M104 512H430L666 276H920" fill="none" stroke="black" stroke-width="72" stroke-linecap="butt" stroke-linejoin="miter" />
+      <path d="M430 512L650 732H760" fill="none" stroke="black" stroke-width="48" stroke-linecap="butt" stroke-linejoin="miter" />
+    </mask>
+  </defs>
+  <rect class="bed" width="1024" height="1024" mask="url(#channel-cut)" />
+  <path class="route" d="M104 512H430L666 276H920" />
+</svg>

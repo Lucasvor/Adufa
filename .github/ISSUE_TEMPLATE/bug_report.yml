@@ -1,0 +1,60 @@
+name: Bug report
+description: Report a reproducible Adufa problem
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include recordings, logs, or configuration files containing private paths or personal data.
+  - type: input
+    id: version
+    attributes:
+      label: Adufa version
+      placeholder: v0.1.0-beta.1 or commit SHA
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version and architecture
+      placeholder: Windows 11 24H2, x64
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: Describe the smallest sequence that reproduces the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where did it happen?
+      multiple: true
+      options:
+        - Tray popup
+        - Output selector
+        - Find sound
+        - Global shortcut
+        - Taskbar companion
+        - Settings
+        - Startup behavior
+  - type: textarea
+    id: audio
+    attributes:
+      label: Audio context
+      description: Name the affected application and output device, but remove private paths and account names.

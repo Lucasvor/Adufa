@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Adufa application icon</title>
+  <desc id="desc">A sound channel reaches a gate and is redirected toward the selected output.</desc>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#171A1F"/>
+  <rect x="2.5" y="2.5" width="59" height="59" rx="13.5" fill="none" stroke="#303640"/>
+  <path d="M13 32H28L41 19H52" fill="none" stroke="#78AFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M28 32L41 45H47" fill="none" stroke="#7C8796" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M47 40V50" fill="none" stroke="#7C8796" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="28" cy="32" r="3.5" fill="#EAF2FF"/>
+</svg>

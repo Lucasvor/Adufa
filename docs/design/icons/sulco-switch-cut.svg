@@ -1,0 +1,11 @@
+<!-- Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V4 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title description">
+  <title id="title">Sulco switch-cut icon exploration</title>
+  <desc id="description">One carved input channel splits into two output grooves, with the upper route selected in copper.</desc>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M144 512H350C456 512 478 300 616 300H872" stroke="oklch(20% 0.012 55)" stroke-width="112"/>
+    <path d="M350 512C456 512 478 724 616 724H872" stroke="oklch(20% 0.012 55)" stroke-width="112"/>
+    <path d="M150 512H350C456 512 478 300 616 300H872" stroke="oklch(58% 0.16 45)" stroke-width="34"/>
+    <path d="M350 512C456 512 478 724 616 724H872" stroke="oklch(97% 0.008 80)" stroke-width="34"/>
+  </g>
+</svg>
