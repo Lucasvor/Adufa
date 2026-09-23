@@ -177,7 +177,7 @@ unsafe extern "system" fn find_app_user_model_id_window(window: HWND, parameter:
     let Ok(value) = BSTR::try_from(&value) else {
         return BOOL(1);
     };
-    if value.to_string() != search.app_user_model_id {
+    if value != search.app_user_model_id {
         return BOOL(1);
     }
 
