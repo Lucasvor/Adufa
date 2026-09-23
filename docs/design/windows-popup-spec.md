@@ -121,11 +121,13 @@ silently becoming the product design.
 - The experimental Windows build observes right-clicks out of process and uses
   monitor work-area geometry to recognize the taskbar without private Explorer
   classes. The low-level callback captures only the pointer location; the UI
-  queue compares the visible taskbar icon with icons Adufa has already loaded
-  for active audio Applications. The original right-click always continues to
-  Explorer. After the native Jump List opens, a unique visual match places the
-  non-activating Adufa selector beside its visible content rectangle rather
-  than the larger host bounds. The calculation removes both the DWM shadow and
+  queue uses documented UI Automation to inspect the button AppID and resolves
+  its running executable independently of audio activity, with the accessible
+  name and executable path as fallbacks. The original
+  right-click always continues to Explorer. After the native Jump List opens,
+  the non-activating Adufa selector is placed beside its visible content
+  rectangle rather than the larger host bounds. The existing icon match remains
+  a fallback. The calculation removes both the DWM shadow and
   the DPI-scaled transparent inset used by Windows' XAML Jump List host,
   preserving both sets of commands without overlap and aligning their visible
   top edges. If resolution fails, only the Windows menu remains. Choosing an

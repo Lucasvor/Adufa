@@ -68,6 +68,7 @@ fn main() {
 
 #[cfg(windows)]
 fn run() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    let start_hidden = std::env::args().any(|argument| argument == "--minimized");
     let observed = audio::observe()?;
     let (runtime, model) =
         application::ApplicationRuntime::start(observed).map_err(std::io::Error::other)?;
@@ -77,6 +78,7 @@ fn run() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let refresh_runtime = runtime;
     ui::run_with_router(
         model,
+        start_hidden,
         move |request| route_runtime.borrow_mut().route(request),
         move |request| volume_runtime.borrow_mut().set_volume(request),
         move || {

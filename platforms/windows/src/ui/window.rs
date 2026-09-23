@@ -228,6 +228,28 @@ impl WindowState {
         }
     }
 
+    fn upsert_taskbar_application(
+        &mut self,
+        application: taskbar_quick_access::TaskbarApplication,
+    ) -> usize {
+        let icon_path = application.icon_path.clone();
+        let index = self.model.upsert_application(
+            application.application_id,
+            application.name,
+            icon_path.clone(),
+            application.process_ids,
+        );
+        let icon = icon_path
+            .as_deref()
+            .and_then(|path| OwnedIcon::from_path_at_dpi(path, 24, self.dpi));
+        if index == self.icons.len() {
+            self.icons.push(icon);
+        } else {
+            self.icons[index] = icon;
+        }
+        index
+    }
+
     fn scale(&self, value: i32) -> i32 {
         value * self.dpi as i32 / 96
     }
@@ -302,6 +324,7 @@ fn load_application_icons(model: &PopupModel, dpi: u32) -> Vec<Option<OwnedIcon>
 
 pub fn run(
     model: PopupModel,
+    start_hidden: bool,
     route: RouteCallback,
     set_volume: VolumeCallback,
     refresh: RefreshCallback,
@@ -379,8 +402,10 @@ pub fn run(
     unsafe { (&mut *raw_state).attach_taskbar_quick_access(window) };
 
     apply_dwm_style(window);
-    // SAFETY: window is a live top-level window owned by this UI thread.
-    motion::show_popup(window);
+    if !start_hidden {
+        // SAFETY: window is a live top-level window owned by this UI thread.
+        motion::show_popup(window);
+    }
 
     let mut message = MSG::default();
     loop {
@@ -479,8 +504,13 @@ unsafe extern "system" fn window_proc(
                 .iter()
                 .enumerate()
                 .filter_map(|(index, icon)| icon.as_ref().map(|icon| (index, icon.handle())));
-            if let Some(target) = taskbar_quick_access::take_pending_target(icon_handles) {
-                state.taskbar_pending_target = Some(target);
+            if let Some(mut target) = taskbar_quick_access::take_pending_target(icon_handles) {
+                if let Some(application) = target.application.take() {
+                    target.application_index = state.upsert_taskbar_application(application);
+                }
+                if target.application_index < state.model.applications.len() {
+                    state.taskbar_pending_target = Some(target);
+                }
                 state.taskbar_companion_attempts = 0;
                 let _ = unsafe {
                     SetTimer(
@@ -596,6 +626,10 @@ unsafe extern "system" fn window_proc(
                             None,
                         )
                     };
+                } else {
+                    state.taskbar_companion_attempts = 0;
+                    let anchor = target.bounds;
+                    show_taskbar_companion_at_anchor(window, state, target, anchor);
                 }
             }
             LRESULT(0)
@@ -761,12 +795,23 @@ fn show_taskbar_quick_access(
     target: taskbar_quick_access::TaskbarButtonTarget,
     native_menu: NativeTaskbarMenu,
 ) {
+    if show_taskbar_companion_at_anchor(window, state, target, native_menu.bounds) {
+        state.taskbar_native_menu = Some(native_menu.window);
+    }
+}
+
+fn show_taskbar_companion_at_anchor(
+    window: HWND,
+    state: &mut WindowState,
+    target: taskbar_quick_access::TaskbarButtonTarget,
+    anchor: RECT,
+) -> bool {
     close_selector(state);
-    state.taskbar_native_menu = Some(native_menu.window);
+    state.taskbar_native_menu = None;
     state.view = View::Main;
     let application_index = target.application_index;
     if application_index >= state.model.applications.len() {
-        return;
+        return false;
     }
 
     state.focus_index = application_index + 1;
@@ -775,15 +820,18 @@ fn show_taskbar_quick_access(
     stop_locator(state);
     let _ = unsafe { ShowWindow(window, SW_HIDE) };
 
-    if !open_selector_at_anchor(
+    if open_selector_at_anchor(
         window,
         state,
         application_index,
-        native_menu.bounds,
+        anchor,
         selector::Placement::TaskbarCompanion,
     ) {
+        true
+    } else {
         state.taskbar_native_menu = None;
         invalidate(window);
+        false
     }
 }
 

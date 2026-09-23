@@ -54,6 +54,37 @@ pub struct VolumeRequest {
 }
 
 impl PopupModel {
+    pub fn upsert_application(
+        &mut self,
+        application_id: String,
+        name: String,
+        icon_path: Option<String>,
+        process_ids: Vec<u32>,
+    ) -> usize {
+        if let Some((index, application)) = self
+            .applications
+            .iter_mut()
+            .enumerate()
+            .find(|(_, application)| application.application_id == application_id)
+        {
+            application.name = name;
+            application.icon_path = icon_path;
+            application.process_ids = process_ids;
+            return index;
+        }
+
+        self.applications.push(ApplicationRow {
+            application_id,
+            name,
+            icon_path,
+            process_ids,
+            selected_output_id: None,
+            volume_percent: 100,
+            muted: false,
+        });
+        self.applications.len() - 1
+    }
+
     pub fn from_observation(
         snapshot: &Snapshot,
         stats: &ScanStats,
@@ -202,5 +233,24 @@ mod tests {
     #[test]
     fn system_sounds_has_a_stable_label() {
         assert_eq!(display_name("windows:system-sounds"), "System sounds");
+    }
+
+    #[test]
+    fn taskbar_application_can_be_added_without_audio_session() {
+        let mut model = PopupModel {
+            applications: Vec::new(),
+            outputs: Vec::new(),
+        };
+
+        let index = model.upsert_application(
+            r"windows:path:C:\Apps\Player.exe".to_owned(),
+            "Player".to_owned(),
+            Some(r"C:\Apps\Player.exe".to_owned()),
+            vec![42],
+        );
+
+        assert_eq!(index, 0);
+        assert_eq!(model.applications[0].process_ids, [42]);
+        assert_eq!(model.applications[0].volume_percent, 100);
     }
 }

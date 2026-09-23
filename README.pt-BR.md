@@ -49,8 +49,8 @@ O beta público atual funciona no **Windows 10 22H2 e Windows 11**.
 - Devolve um aplicativo a `Padrão do sistema` (`System default`) com uma seleção.
 - Altera o volume atual por aplicativo e o estado de mudo.
 - Em versões compatíveis do Windows 11, clique com o botão direito em um aplicativo
-  audível na barra de tarefas para abrir controles experimentais de saída, volume e
-  mudo ao lado do menu nativo.
+  em execução na barra de tarefas para abrir controles experimentais de saída, volume e
+  mudo ao lado do menu nativo, mesmo antes de ele criar uma sessão de áudio.
 - Inclui **Encontrar som** (`Find sound`), uma visualização temporária ao vivo que destaca o aplicativo com áudio mais alto.
 - Abre um seletor rápido perto do cursor com `Ctrl + Alt + A`.
 - Pode iniciar com a sessão do usuário; essa opção permanece desativada até você habilitá-la.
@@ -62,13 +62,13 @@ O beta público atual funciona no **Windows 10 22H2 e Windows 11**.
 ### Integração experimental com o Windows
 
 Em versões compatíveis do Windows 11, clicar com o botão direito no ícone da barra de
-tarefas de um aplicativo que está emitindo áudio pode abrir o painel compacto do
-Adufa ao lado do menu nativo da barra de tarefas. O menu nativo continua disponível;
-o Adufa o complementa com controles de volume e saída.
+tarefas de um aplicativo em execução pode abrir o painel compacto do Adufa ao lado do
+menu nativo, mesmo antes de o aplicativo emitir áudio. O menu nativo continua
+disponível; o Adufa o complementa com controles de volume e saída.
 
-Essa integração depende de associar o ícone visível na barra de tarefas a um
-aplicativo com sessão de áudio ativa. É uma funcionalidade beta e pode recorrer ao
-atalho global ou ao popup da bandeja quando o Windows não fornece uma associação confiável.
+Essa integração usa o AppID do botão da barra de tarefas quando disponível, com o nome
+acessível e o caminho do executável como alternativas. É uma funcionalidade beta e pode
+recorrer ao atalho global ou ao popup da bandeja quando o Windows não fornece uma associação confiável.
 
 ## Instalar o beta
 
@@ -130,14 +130,14 @@ fornece e para quando o popup compacto é fechado.
 
 ### Usar o painel complementar da barra de tarefas
 
-1. Faça o aplicativo desejado reproduzir áudio pelo menos uma vez para que o Windows
-   exponha uma sessão de áudio.
-2. Clique com o botão direito no ícone dele na barra de tarefas.
-3. Use o painel adjacente do Adufa para silenciar, ajustar o volume ou selecionar uma saída.
-4. Selecionar uma saída fecha tanto o painel complementar quanto o menu nativo.
+1. Mantenha o aplicativo desejado em execução e clique com o botão direito no ícone dele
+  na barra de tarefas. Não é necessário que o áudio esteja tocando ainda.
+2. Use o painel adjacente do Adufa para silenciar, ajustar o volume ou selecionar uma saída.
+3. Selecionar uma saída fecha tanto o painel complementar quanto o menu nativo. O Windows
+  aplica a rota quando a sessão de áudio do aplicativo for criada.
 
-Se o painel não aparecer, use `Ctrl + Alt + A` enquanto aponta para o aplicativo que
-está emitindo áudio ou abra o Adufa pela área de notificação.
+Se o painel não aparecer, use `Ctrl + Alt + A` enquanto aponta para o aplicativo desejado
+ou abra o Adufa pela área de notificação.
 
 ### Alterar o idioma ou o comportamento de inicialização
 
@@ -152,7 +152,7 @@ Abra **Configurações** (`Settings`) para:
 | Entrada | Ação |
 | --- | --- |
 | `Ctrl + Alt + A` | Abrir o seletor rápido perto do cursor para o aplicativo audível sob o ponteiro |
-| Clique com o botão direito em um aplicativo audível na barra de tarefas | Abrir o painel experimental do Adufa ao lado do menu nativo |
+| Clique com o botão direito em um aplicativo em execução na barra de tarefas | Abrir o painel experimental do Adufa ao lado do menu nativo |
 | `Tab` ou `↓` | Ir para o próximo item |
 | `↑` | Ir para o item anterior |
 | `Enter` ou `Space` | Ativar o item em foco |

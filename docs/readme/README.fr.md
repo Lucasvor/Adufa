@@ -49,8 +49,8 @@ La bêta publique actuelle fonctionne sous **Windows 10 22H2 et Windows 11**.
 - Rétablit une application sur `Sortie système par défaut` (`System default`) en une sélection.
 - Modifie le volume actuel et l'état muet de chaque application.
 - Sur les versions compatibles de Windows 11, faites un clic droit sur une
-  application audible dans la barre des tâches pour ouvrir des commandes
-  expérimentales de sortie, volume et muet à côté du menu natif.
+  application en cours d'exécution dans la barre des tâches pour ouvrir des commandes
+  expérimentales de sortie, volume et muet à côté du menu natif, même avant toute session audio.
 - Inclut **Localiser le son** (`Find sound`), une vue temporaire en direct qui met en évidence l'application la plus forte.
 - Ouvre un sélecteur rapide près du pointeur avec `Ctrl + Alt + A`.
 - Peut démarrer à l'ouverture de session ; cette option reste désactivée tant que vous ne l'activez pas.
@@ -62,13 +62,14 @@ La bêta publique actuelle fonctionne sous **Windows 10 22H2 et Windows 11**.
 ### Intégration Windows expérimentale
 
 Sur les versions compatibles de Windows 11, un clic droit sur l'icône de barre des tâches
-d'une application qui émet du son peut ouvrir le panneau compact d'Adufa à côté du menu natif.
-Le menu natif reste disponible ; Adufa le complète avec les commandes de volume et de sortie.
+d'une application en cours d'exécution peut ouvrir le panneau compact d'Adufa à côté du menu
+natif, même avant que l'application n'émette du son. Le menu natif reste disponible ; Adufa
+le complète avec les commandes de volume et de sortie.
 
-Cette intégration repose sur l'association entre l'icône visible de la barre des tâches et une
-application ayant une session audio active. Il s'agit d'une fonction bêta qui peut se rabattre
-sur le raccourci global ou la fenêtre de la zone de notification lorsque Windows ne fournit pas
-d'association fiable.
+Cette intégration utilise l'AppID du bouton de la barre des tâches lorsqu'il est disponible,
+avec le nom accessible et le chemin de l'exécutable comme solutions de repli. Il s'agit d'une
+fonction bêta qui peut se rabattre sur le raccourci global ou la fenêtre de la zone de
+notification lorsque Windows ne fournit pas d'association fiable.
 
 ## Installer la bêta
 
@@ -130,12 +131,13 @@ que Windows fournit déjà et s'arrête à la fermeture de la fenêtre compacte.
 
 ### Utiliser le panneau complémentaire de la barre des tâches
 
-1. Laissez l'application cible produire du son au moins une fois afin que Windows expose une session audio.
-2. Faites un clic droit sur son icône dans la barre des tâches.
-3. Utilisez le panneau adjacent d'Adufa pour couper le son, régler le volume ou choisir une sortie.
-4. La sélection d'une sortie ferme à la fois le panneau complémentaire et le menu natif.
+1. Laissez l'application cible s'exécuter et faites un clic droit sur son icône dans la barre
+  des tâches. Il n'est pas nécessaire que le son soit déjà en cours de lecture.
+2. Utilisez le panneau adjacent d'Adufa pour couper le son, régler le volume ou choisir une sortie.
+3. La sélection d'une sortie ferme à la fois le panneau complémentaire et le menu natif. Windows
+  applique le routage lorsque la session audio de l'application est créée.
 
-Si le panneau n'apparaît pas, utilisez `Ctrl + Alt + A` en pointant l'application audible, ou
+Si le panneau n'apparaît pas, utilisez `Ctrl + Alt + A` en pointant l'application cible, ou
 ouvrez Adufa depuis la zone de notification.
 
 ### Changer la langue ou le comportement au démarrage
@@ -151,7 +153,7 @@ Ouvrez **Paramètres** (`Settings`) pour :
 | Entrée | Action |
 | --- | --- |
 | `Ctrl + Alt + A` | Ouvrir le sélecteur rapide près du pointeur pour l'application audible sous celui-ci |
-| Clic droit sur une application audible de la barre des tâches | Ouvrir le panneau expérimental d'Adufa à côté du menu natif |
+| Clic droit sur une application en cours d'exécution de la barre des tâches | Ouvrir le panneau expérimental d'Adufa à côté du menu natif |
 | `Tab` ou `↓` | Passer à l'élément suivant |
 | `↑` | Revenir à l'élément précédent |
 | `Enter` ou `Space` | Activer l'élément sélectionné |

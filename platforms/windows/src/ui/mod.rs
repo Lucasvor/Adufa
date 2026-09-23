@@ -26,6 +26,7 @@ type BoxError = Box<dyn std::error::Error + Send + Sync>;
 /// prevents the UI from claiming a route that Windows rejected.
 pub fn run_with_router<F, V, R>(
     model: PopupModel,
+    start_hidden: bool,
     route: F,
     set_volume: V,
     refresh: R,
@@ -37,6 +38,7 @@ where
 {
     window::run(
         model,
+        start_hidden,
         Box::new(route),
         Box::new(set_volume),
         Box::new(refresh),

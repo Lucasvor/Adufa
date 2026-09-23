@@ -1,8 +1,8 @@
 //! Direct, out-of-process quick access for Windows taskbar buttons.
 //!
 //! Explorer remains untouched. A low-level mouse hook observes right-clicks,
-//! compares the visible taskbar icon with Adufa's already-loaded app icons, and
-//! notifies the UI when it uniquely matches an audible Adufa application. The
+//! inspects the visible taskbar button outside the hook callback, and notifies
+//! the UI with a running application target when it can resolve one. The
 //! original gesture always continues to Explorer so its native menu is kept.
 
 use std::sync::Mutex;
@@ -14,12 +14,18 @@ use windows::Win32::Graphics::Gdi::{
     DIB_RGB_COLORS, DeleteDC, DeleteObject, GetDC, GetMonitorInfoW, HGDIOBJ,
     MONITOR_DEFAULTTONEAREST, MONITORINFO, MonitorFromPoint, ReleaseDC, SRCCOPY, SelectObject,
 };
+use windows::Win32::System::Com::{
+    CLSCTX_ALL, COINIT_APARTMENTTHREADED, CoCreateInstance, CoInitializeEx, CoUninitialize,
+};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
+use windows::Win32::UI::Accessibility::{CUIAutomation, IUIAutomation};
 use windows::Win32::UI::WindowsAndMessaging::{
     CallNextHookEx, DI_NORMAL, DrawIconEx, GA_ROOT, GetAncestor, GetClassNameW, HC_ACTION, HHOOK,
     HICON, LLMHF_INJECTED, MSLLHOOKSTRUCT, PostMessageW, SetWindowsHookExW, UnhookWindowsHookEx,
-    WH_MOUSE_LL, WM_RBUTTONDOWN, WM_RBUTTONUP, WindowFromPoint,
+    WH_MOUSE_LL, WM_RBUTTONDOWN, WindowFromPoint,
 };
+
+use crate::process_identity;
 
 /// Notifies the UI thread that a known taskbar application was right-clicked.
 /// The owned target is retrieved through [`take_pending_target`].
@@ -34,10 +40,19 @@ const MATCH_SEARCH_DIP: i32 = 22;
 const MAX_MATCH_SCORE: u64 = 4_000;
 const MIN_MATCH_MARGIN_PERCENT: u64 = 112;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct TaskbarButtonTarget {
     pub application_index: usize,
     pub bounds: RECT,
+    pub application: Option<TaskbarApplication>,
+}
+
+#[derive(Clone, Debug)]
+pub struct TaskbarApplication {
+    pub application_id: String,
+    pub name: String,
+    pub icon_path: Option<String>,
+    pub process_ids: Vec<u32>,
 }
 
 /// Owns the process-wide mouse hook.
@@ -86,6 +101,25 @@ pub fn take_pending_target(
         .unwrap_or_else(std::sync::PoisonError::into_inner)
         .take()?;
     let taskbar = taskbar_rect_at(point)?;
+    if let Some((name, automation_id, bounds)) = inspect_taskbar_button(point) {
+        let application = automation_id
+            .as_deref()
+            .and_then(process_identity::find_running_application_by_aumid)
+            .or_else(|| process_identity::find_running_application(&name));
+        if let Some(application) = application {
+            return Some(TaskbarButtonTarget {
+                application_index: usize::MAX,
+                bounds,
+                application: Some(TaskbarApplication {
+                    application_id: application.application_id.as_str().to_owned(),
+                    name,
+                    icon_path: application.executable_path,
+                    process_ids: application.process_ids,
+                }),
+            });
+        }
+    }
+
     let icon_size = taskbar_icon_size(taskbar);
     let search = scale_for_taskbar(MATCH_SEARCH_DIP, taskbar);
     let capture_bounds = RECT {
@@ -114,7 +148,41 @@ pub fn take_pending_target(
             right: icon_center_x + (button_width + 1) / 2,
             bottom: taskbar.bottom,
         },
+        application: None,
     })
+}
+
+struct UiAutomationApartment;
+
+impl UiAutomationApartment {
+    fn initialize() -> windows::core::Result<Self> {
+        unsafe { CoInitializeEx(None, COINIT_APARTMENTTHREADED).ok()? };
+        Ok(Self)
+    }
+}
+
+impl Drop for UiAutomationApartment {
+    fn drop(&mut self) {
+        unsafe { CoUninitialize() };
+    }
+}
+
+fn inspect_taskbar_button(point: POINT) -> Option<(String, Option<String>, RECT)> {
+    let _apartment = UiAutomationApartment::initialize().ok()?;
+    let automation: IUIAutomation =
+        unsafe { CoCreateInstance(&CUIAutomation, None, CLSCTX_ALL).ok()? };
+    let element = unsafe { automation.ElementFromPoint(point).ok()? };
+    let name = unsafe { element.CurrentName().ok()? }.to_string();
+    let automation_id = unsafe { element.CurrentAutomationId().ok() }.map(|id| id.to_string());
+    let bounds = unsafe { element.CurrentBoundingRectangle().ok()? };
+    if name.trim().is_empty()
+        || bounds.right <= bounds.left
+        || bounds.bottom <= bounds.top
+        || !point_in_rect(point, bounds)
+    {
+        return None;
+    }
+    Some((name, automation_id, bounds))
 }
 
 unsafe extern "system" fn mouse_hook_callback(
@@ -137,14 +205,6 @@ unsafe extern "system" fn mouse_hook_callback(
         *PENDING_POINT
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(event.pt);
-    }
-
-    if message == WM_RBUTTONUP
-        && PENDING_POINT
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner)
-            .is_some()
-    {
         let owner_value = OWNER_WINDOW.load(Ordering::Acquire);
         if owner_value != 0 {
             let owner = HWND(owner_value as *mut core::ffi::c_void);

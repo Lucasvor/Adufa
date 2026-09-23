@@ -49,8 +49,8 @@ L'attuale beta pubblica funziona su **Windows 10 22H2 e Windows 11**.
 - Riporta un'applicazione a `Predefinito di sistema` (`System default`) con una sola selezione.
 - Modifica il volume corrente e lo stato di disattivazione audio per applicazione.
 - Nelle versioni supportate di Windows 11, fai clic con il pulsante destro su
-  un'app udibile nella barra delle applicazioni per aprire i controlli sperimentali
-  di uscita, volume e disattivazione audio accanto al menu nativo.
+  un'app in esecuzione nella barra delle applicazioni per aprire i controlli sperimentali
+  di uscita, volume e disattivazione audio accanto al menu nativo, anche prima di una sessione audio.
 - Include **Trova suono** (`Find sound`), una vista temporanea in tempo reale che evidenzia l'applicazione più rumorosa.
 - Apre un selettore rapido vicino al puntatore con `Ctrl + Alt + A`.
 - Può avviarsi all'accesso; l'opzione rimane disattivata finché non viene abilitata.
@@ -62,13 +62,14 @@ L'attuale beta pubblica funziona su **Windows 10 22H2 e Windows 11**.
 ### Integrazione sperimentale con Windows
 
 Nelle versioni supportate di Windows 11, facendo clic con il pulsante destro sull'icona nella
-barra delle applicazioni di un'app che emette audio è possibile aprire il pannello compatto di
-Adufa accanto al menu nativo. Il menu nativo resta disponibile; Adufa lo completa con i controlli
-del volume e dell'uscita.
+barra delle applicazioni di un'app in esecuzione è possibile aprire il pannello compatto di Adufa
+accanto al menu nativo, anche prima che l'app emetta audio. Il menu nativo resta disponibile;
+Adufa lo completa con i controlli del volume e dell'uscita.
 
-Questa integrazione dipende dall'associazione dell'icona visibile nella barra delle applicazioni
-a un'applicazione con una sessione audio attiva. È una funzione beta e può ripiegare sulla
-scorciatoia globale o sul popup dell'area di notifica quando Windows non fornisce una corrispondenza affidabile.
+Questa integrazione usa l'AppID del pulsante della barra delle applicazioni quando disponibile,
+con il nome accessibile e il percorso dell'eseguibile come alternative. È una funzione beta e
+può ripiegare sulla scorciatoia globale o sul popup dell'area di notifica quando Windows non
+fornisce una corrispondenza affidabile.
 
 ## Installare la beta
 
@@ -130,12 +131,13 @@ e si arresta quando viene chiuso il popup compatto.
 
 ### Usare il pannello affiancato alla barra delle applicazioni
 
-1. Lascia che l'applicazione interessata riproduca audio almeno una volta affinché Windows esponga una sessione audio.
-2. Fai clic con il pulsante destro sulla sua icona nella barra delle applicazioni.
-3. Usa il pannello adiacente di Adufa per disattivare l'audio, regolare il volume o selezionare un'uscita.
-4. La selezione di un'uscita chiude sia il pannello di Adufa sia il menu nativo.
+1. Lascia l'applicazione interessata in esecuzione e fai clic con il pulsante destro sulla sua
+  icona nella barra delle applicazioni. Non è ancora necessario riprodurre audio.
+2. Usa il pannello adiacente di Adufa per disattivare l'audio, regolare il volume o selezionare un'uscita.
+3. La selezione di un'uscita chiude sia il pannello di Adufa sia il menu nativo. Windows applica
+  l'instradamento quando viene creata la sessione audio dell'applicazione.
 
-Se il pannello non appare, usa `Ctrl + Alt + A` mentre punti all'applicazione udibile oppure apri
+Se il pannello non appare, usa `Ctrl + Alt + A` mentre punti all'applicazione interessata oppure apri
 Adufa dall'area di notifica.
 
 ### Cambiare la lingua o il comportamento all'avvio
@@ -151,7 +153,7 @@ Apri **Impostazioni** (`Settings`) per:
 | Input | Azione |
 | --- | --- |
 | `Ctrl + Alt + A` | Aprire il selettore rapido vicino al puntatore per l'applicazione udibile sotto di esso |
-| Clic destro su un'applicazione udibile nella barra delle applicazioni | Aprire il pannello sperimentale di Adufa accanto al menu nativo |
+| Clic destro su un'applicazione in esecuzione nella barra delle applicazioni | Aprire il pannello sperimentale di Adufa accanto al menu nativo |
 | `Tab` o `↓` | Passare all'elemento successivo |
 | `↑` | Passare all'elemento precedente |
 | `Enter` o `Space` | Attivare l'elemento con lo stato attivo |

@@ -23,6 +23,7 @@ const RENDER_DEVICE_INTERFACE_CLASS: &str = "{e6327cad-dcec-4949-ae8a-991e976a79
 const E_RENDER: i32 = 0;
 const E_CONSOLE: i32 = 0;
 const E_MULTIMEDIA: i32 = 1;
+const E_INVALIDARG: HRESULT = HRESULT(0x8007_0057_u32 as i32);
 
 /// A failure while applying a persisted Windows per-process output selection.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -152,17 +153,25 @@ pub fn route_processes(
 
     for &process_id in process_ids {
         for role in [AudioRole::Multimedia, AudioRole::Console] {
-            factory
-                .set_persisted_default(process_id, role, device_path.as_ref())
-                .map_err(|code| RoutingError::AssignmentFailed {
-                    process_id,
-                    role,
-                    code,
-                })?;
+            match factory.set_persisted_default(process_id, role, device_path.as_ref()) {
+                Ok(()) => {}
+                Err(code) if is_ignorable_assignment_error(code) => {}
+                Err(code) => {
+                    return Err(RoutingError::AssignmentFailed {
+                        process_id,
+                        role,
+                        code,
+                    });
+                }
+            }
         }
     }
 
     Ok(())
+}
+
+fn is_ignorable_assignment_error(code: HRESULT) -> bool {
+    code == E_INVALIDARG
 }
 
 /// Reads the explicit output that Windows has persisted for an application.
@@ -490,5 +499,15 @@ mod tests {
     fn accepts_system_default_and_explicit_outputs() {
         assert_eq!(validate_request(&[42, 43], None), Ok(()));
         assert_eq!(validate_request(&[42], Some("raw-mmdevice-id")), Ok(()));
+    }
+
+    #[test]
+    fn invalid_argument_is_ignorable_for_processes_without_audio_sessions() {
+        assert!(is_ignorable_assignment_error(HRESULT(
+            0x8007_0057_u32 as i32
+        )));
+        assert!(!is_ignorable_assignment_error(HRESULT(
+            0x8007_0005_u32 as i32
+        )));
     }
 }

@@ -48,9 +48,9 @@ Die aktuelle öffentliche Beta läuft unter **Windows 10 22H2 und Windows 11**.
 - Merkt sich App-Routen über Neustarts von Adufa und der jeweiligen App hinweg.
 - Setzt eine App mit einer Auswahl auf `Systemstandard` (`System default`) zurück.
 - Ändert die aktuelle Lautstärke und Stummschaltung pro App.
-- Auf unterstützten Windows-11-Versionen öffnet ein Rechtsklick auf eine hörbare
+- Auf unterstützten Windows-11-Versionen öffnet ein Rechtsklick auf eine laufende
   Taskleisten-App experimentelle Regler für Ausgang, Lautstärke und Stummschaltung
-  neben dem nativen Menü.
+  neben dem nativen Menü, auch bevor eine Audiositzung aktiv ist.
 - Enthält **Ton finden** (`Find sound`), eine temporäre Live-Ansicht, die die lauteste App hervorhebt.
 - Öffnet mit `Ctrl + Alt + A` eine Schnellauswahl nahe am Mauszeiger.
 - Kann bei der Anmeldung starten; die Option bleibt deaktiviert, bis sie eingeschaltet wird.
@@ -62,12 +62,14 @@ Die aktuelle öffentliche Beta läuft unter **Windows 10 22H2 und Windows 11**.
 ### Experimentelle Windows-Integration
 
 Auf unterstützten Windows-11-Versionen kann ein Rechtsklick auf das Taskleistensymbol
-einer hörbaren App das kompakte Begleitfenster neben dem nativen Taskleistenmenü
-öffnen. Das native Menü bleibt verfügbar; Adufa ergänzt es um Lautstärke- und Ausgangsregler.
+einer laufenden App das kompakte Begleitfenster neben dem nativen Taskleistenmenü öffnen,
+auch bevor die App Ton wiedergibt. Das native Menü bleibt verfügbar; Adufa ergänzt es um
+Lautstärke- und Ausgangsregler.
 
-Diese Integration muss das sichtbare Taskleistensymbol einer aktiven Audiositzung zuordnen.
-Sie befindet sich in der Beta und kann auf das globale Tastenkürzel oder das Infobereich-Popup
-zurückfallen, wenn Windows keine zuverlässige Zuordnung bereitstellt.
+Diese Integration verwendet nach Möglichkeit die AppID des Taskleistenbuttons und nutzt den
+zugänglichen Namen oder den Programmpfad als Fallback. Sie befindet sich in der Beta und kann
+auf das globale Tastenkürzel oder das Infobereich-Popup zurückfallen, wenn Windows keine
+zuverlässige Zuordnung bereitstellt.
 
 ## Beta installieren
 
@@ -129,13 +131,14 @@ Sitzungs-Spitzenpegel und endet, sobald das kompakte Popup geschlossen wird.
 
 ### Das Taskleisten-Begleitfenster verwenden
 
-1. Lass die Ziel-App mindestens einmal Ton wiedergeben, damit Windows eine Audiositzung bereitstellt.
-2. Klicke mit der rechten Maustaste auf ihr Taskleistensymbol.
-3. Verwende das angrenzende Adufa-Fenster zum Stummschalten, Regeln der Lautstärke oder Auswählen eines Ausgangs.
-4. Die Auswahl eines Ausgangs schließt das Begleitfenster und das native Menü.
+1. Lass die Ziel-App laufen und klicke mit der rechten Maustaste auf ihr Taskleistensymbol.
+  Ton muss noch nicht wiedergegeben werden.
+2. Verwende das angrenzende Adufa-Fenster zum Stummschalten, Regeln der Lautstärke oder Auswählen eines Ausgangs.
+3. Die Auswahl eines Ausgangs schließt das Begleitfenster und das native Menü. Windows wendet
+  die Route an, sobald die Audiositzung der App erstellt wird.
 
 Falls kein Begleitfenster erscheint, verwende `Ctrl + Alt + A`, während der Zeiger auf der
-hörbaren App liegt, oder öffne Adufa über den Infobereich.
+Ziel-App liegt, oder öffne Adufa über den Infobereich.
 
 ### Sprache oder Startverhalten ändern
 
@@ -150,7 +153,7 @@ hörbaren App liegt, oder öffne Adufa über den Infobereich.
 | Eingabe | Aktion |
 | --- | --- |
 | `Ctrl + Alt + A` | Schnellauswahl nahe am Zeiger für die hörbare App unter dem Zeiger öffnen |
-| Rechtsklick auf eine hörbare Taskleisten-App | Experimentelles Adufa-Fenster neben dem nativen Menü öffnen |
+| Rechtsklick auf eine laufende Taskleisten-App | Experimentelles Adufa-Fenster neben dem nativen Menü öffnen |
 | `Tab` oder `↓` | Zum nächsten Element wechseln |
 | `↑` | Zum vorherigen Element wechseln |
 | `Enter` oder `Space` | Fokussiertes Element aktivieren |

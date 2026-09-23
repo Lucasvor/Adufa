@@ -49,8 +49,8 @@ La beta pública actual funciona en **Windows 10 22H2 y Windows 11**.
 - Devuelve una aplicación a `Predeterminado del sistema` (`System default`) con una sola selección.
 - Cambia el volumen actual y el estado de silencio de cada aplicación.
 - En versiones compatibles de Windows 11, haz clic con el botón derecho en una
-  aplicación audible de la barra de tareas para abrir controles experimentales de
-  salida, volumen y silencio junto al menú nativo.
+  aplicación en ejecución de la barra de tareas para abrir controles experimentales de
+  salida, volumen y silencio junto al menú nativo, incluso antes de que tenga una sesión de audio.
 - Incluye **Buscar sonido** (`Find sound`), una vista temporal en directo que resalta la aplicación con mayor volumen.
 - Abre un selector rápido junto al cursor con `Ctrl + Alt + A`.
 - Puede iniciarse al abrir sesión; esta opción permanece desactivada hasta que la habilites.
@@ -61,13 +61,14 @@ La beta pública actual funciona en **Windows 10 22H2 y Windows 11**.
 ### Integración experimental con Windows
 
 En versiones compatibles de Windows 11, hacer clic con el botón derecho en el icono de la
-barra de tareas de una aplicación que emite audio puede abrir el panel compacto de Adufa
-junto al menú nativo. El menú nativo sigue disponible; Adufa lo complementa con controles
-de volumen y salida.
+barra de tareas de una aplicación en ejecución puede abrir el panel compacto de Adufa junto
+al menú nativo, incluso antes de que la aplicación emita audio. El menú nativo sigue
+disponible; Adufa lo complementa con controles de volumen y salida.
 
-Esta integración depende de asociar el icono visible de la barra de tareas con una aplicación
-que tenga una sesión de audio activa. Es una función beta y puede recurrir al atajo global o
-a la ventana emergente de la bandeja si Windows no proporciona una asociación fiable.
+Esta integración usa el AppID del botón de la barra de tareas cuando está disponible, con el
+nombre accesible y la ruta del ejecutable como alternativas. Es una función beta y puede
+recurrir al atajo global o a la ventana emergente de la bandeja si Windows no proporciona una
+asociación fiable.
 
 ## Instalar la beta
 
@@ -129,12 +130,13 @@ se detiene cuando se cierra la ventana emergente compacta.
 
 ### Usar el panel complementario de la barra de tareas
 
-1. Deja que la aplicación de destino reproduzca audio al menos una vez para que Windows exponga una sesión.
-2. Haz clic con el botón derecho en su icono de la barra de tareas.
-3. Utiliza el panel adyacente de Adufa para silenciar, ajustar el volumen o seleccionar una salida.
-4. Al seleccionar una salida se cierran tanto el panel complementario como el menú nativo.
+1. Mantén abierta la aplicación de destino y haz clic con el botón derecho en su icono de la
+  barra de tareas. No es necesario que el audio esté reproduciéndose todavía.
+2. Utiliza el panel adyacente de Adufa para silenciar, ajustar el volumen o seleccionar una salida.
+3. Al seleccionar una salida se cierran tanto el panel complementario como el menú nativo.
+  Windows aplicará la ruta cuando se cree la sesión de audio de la aplicación.
 
-Si el panel no aparece, usa `Ctrl + Alt + A` mientras apuntas a la aplicación audible o abre
+Si el panel no aparece, usa `Ctrl + Alt + A` mientras apuntas a la aplicación de destino o abre
 Adufa desde el área de notificación.
 
 ### Cambiar el idioma o el comportamiento de inicio
@@ -150,7 +152,7 @@ Abre **Configuración** (`Settings`) para:
 | Entrada | Acción |
 | --- | --- |
 | `Ctrl + Alt + A` | Abrir el selector rápido junto al cursor para la aplicación audible situada bajo el puntero |
-| Clic derecho en una aplicación audible de la barra de tareas | Abrir el panel experimental de Adufa junto al menú nativo |
+| Clic derecho en una aplicación en ejecución de la barra de tareas | Abrir el panel experimental de Adufa junto al menú nativo |
 | `Tab` o `↓` | Ir al elemento siguiente |
 | `↑` | Ir al elemento anterior |
 | `Enter` o `Space` | Activar el elemento enfocado |

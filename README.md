@@ -48,8 +48,9 @@ The current public beta runs on **Windows 10 22H2 and Windows 11**.
 - Remembers application routes across Adufa and application restarts.
 - Returns an application to `System default` with one selection.
 - Changes current per-application volume and mute state.
-- On supported Windows 11 builds, right-click an audible taskbar app to open
-  experimental output, volume, and mute controls beside the native menu.
+- On supported Windows 11 builds, right-click a running taskbar app to open
+  experimental output, volume, and mute controls beside the native menu, even
+  before it has an active audio session.
 - Includes **Find sound**, a temporary live view that highlights the loudest application.
 - Opens a quick selector near the cursor with `Ctrl + Alt + A`.
 - Can start when you sign in; this remains off until you enable it.
@@ -60,14 +61,15 @@ The current public beta runs on **Windows 10 22H2 and Windows 11**.
 
 ### Experimental Windows integration
 
-On supported Windows 11 builds, right-clicking the taskbar icon of an audible
-application can open Adufa's compact companion beside the native taskbar menu.
-The native menu remains available; Adufa complements it with volume and output
-controls.
+On supported Windows 11 builds, right-clicking the taskbar icon of a running
+application can open Adufa's compact companion beside the native taskbar menu,
+even before that application starts producing audio. The native menu remains
+available; Adufa complements it with volume and output controls.
 
-This integration depends on matching the visible taskbar icon to an active audio
-application. It is beta functionality and can fall back to the global shortcut or
-tray popup when Windows does not expose a reliable match.
+This integration uses the taskbar button's AppID when available, with the
+accessible name and executable path as fallbacks. It remains beta functionality
+and can fall back to the global shortcut or tray popup when Windows does not
+expose a reliable match.
 
 ## Install the beta
 
@@ -129,13 +131,13 @@ provides and stops when the compact popup closes.
 
 ### Use the taskbar companion
 
-1. Let the target application produce audio at least once so Windows exposes an
-   audio session.
-2. Right-click its taskbar icon.
-3. Use Adufa's adjacent panel to mute, adjust volume, or select an output.
-4. Selecting an output closes both the companion and the native menu.
+1. Keep the target application running and right-click its taskbar icon. Audio
+  does not need to be playing yet.
+2. Use Adufa's adjacent panel to mute, adjust volume, or select an output.
+3. Selecting an output closes both the companion and the native menu. Windows
+  applies the selected route when the application's audio session is created.
 
-If a companion does not appear, use `Ctrl + Alt + A` while pointing at the audible
+If a companion does not appear, use `Ctrl + Alt + A` while pointing at the target
 application, or open Adufa from the notification area.
 
 ### Change the language or startup behavior
@@ -151,7 +153,7 @@ Open **Settings** to:
 | Input | Action |
 | --- | --- |
 | `Ctrl + Alt + A` | Open the quick selector near the cursor for the audible app under the pointer |
-| Right-click an audible taskbar app | Open the experimental Adufa companion beside the native menu |
+| Right-click a running taskbar app | Open the experimental Adufa companion beside the native menu |
 | `Tab` or `↓` | Move to the next item |
 | `↑` | Move to the previous item |
 | `Enter` or `Space` | Activate the focused item |

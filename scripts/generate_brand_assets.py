@@ -1,8 +1,9 @@
 """Generate Adufa's raster icon package and README demonstration GIF.
 
 The frames reproduce the native compact popup, output selector, and taskbar
-companion without including a personal desktop capture. Keeping the demo
-deterministic makes documentation updates reviewable.
+companion for a running application, even before it has an active audio session,
+without including a personal desktop capture. Keeping the demo deterministic
+makes documentation updates reviewable.
 """
 
 from __future__ import annotations
@@ -90,6 +91,9 @@ def application_icon(draw: ImageDraw.ImageDraw, x: int, y: int, kind: str) -> No
         draw.pieslice(((x-11)*SCALE, (y-11)*SCALE, (x+11)*SCALE, (y+11)*SCALE), 120, 240, fill="#D9544D")
         draw.pieslice(((x-11)*SCALE, (y-11)*SCALE, (x+11)*SCALE, (y+11)*SCALE), 240, 360, fill="#4CA06A")
         draw.ellipse(((x-5)*SCALE, (y-5)*SCALE, (x+5)*SCALE, (y+5)*SCALE), fill="#4385E5")
+    elif kind == "helium":
+        draw.ellipse(((x-11)*SCALE, (y-11)*SCALE, (x+11)*SCALE, (y+11)*SCALE), fill="#5D8FE8")
+        label(draw, (x, y), "H", 13, "#FFFFFF", True, "mm")
     elif kind == "zen":
         draw.ellipse(((x-10)*SCALE, (y-10)*SCALE, (x+10)*SCALE, (y+10)*SCALE), outline="#B8B8B2", width=2*SCALE)
         draw.ellipse(((x-5)*SCALE, (y-5)*SCALE, (x+5)*SCALE, (y+5)*SCALE), outline="#8D938C", width=2*SCALE)
@@ -149,11 +153,11 @@ def popup(draw: ImageDraw.ImageDraw, x: int, y: int, selected: int | None = None
 
 def native_menu(draw: ImageDraw.ImageDraw, x: int, y: int) -> None:
     box(draw, (x, y, x+248, y+322), 10, "#242428", "#45454A")
-    label(draw, (x+16, y+22), "Recently played", 11, "#D4D4D8")
-    items = ["Daily Mix 4", "Old favorites", "Bonnie Tyler", "Spotify"]
+    label(draw, (x+16, y+22), "Helium", 11, "#D4D4D8")
+    items = ["New window", "Restore window", "Pin to taskbar", "Close window"]
     for i, item in enumerate(items):
         yy = y + 55 + i*34
-        app_dot(draw, x+22, yy, "#1ED760", "S")
+        application_icon(draw, x+22, yy, "helium")
         label(draw, (x+44, yy), item, 12, "#F4F4F5", False, "lm")
     line(draw, [(x+10, y+186), (x+238, y+186)], "#414146", 1)
     for i, item in enumerate(["Unpin from taskbar", "End task", "Close window"]):
@@ -164,8 +168,8 @@ def native_menu(draw: ImageDraw.ImageDraw, x: int, y: int) -> None:
 
 def selector(draw: ImageDraw.ImageDraw, x: int, y: int, volume: int = 72, choice: int = 4) -> None:
     box(draw, (x, y, x+250, y+322), 10, PANEL, LINE)
-    application_icon(draw, x+24, y+25, "spotify")
-    label(draw, (x+47, y+25), "Spotify", 14, TEXT, True, "lm")
+    application_icon(draw, x+24, y+25, "helium")
+    label(draw, (x+47, y+25), "Helium", 14, TEXT, True, "lm")
     line(draw, [(x+12, y+48), (x+238, y+48)], LINE, 1)
     speaker_icon(draw, x+18, y+75)
     line(draw, [(x+44, y+75), (x+180, y+75)], "#48515E", 5)
@@ -186,7 +190,7 @@ def selector(draw: ImageDraw.ImageDraw, x: int, y: int, volume: int = 72, choice
 
 def taskbar(draw: ImageDraw.ImageDraw) -> None:
     draw.rectangle((342*SCALE, 428*SCALE, 884*SCALE, 478*SCALE), fill="#20242A")
-    for index, kind in enumerate(["chrome", "spotify", "zen"]):
+    for index, kind in enumerate(["chrome", "helium", "zen"]):
         x = 500 + index * 48
         application_icon(draw, x, 452, kind)
         draw.rounded_rectangle(((x-12)*SCALE, 470*SCALE, (x+12)*SCALE, 473*SCALE), SCALE, fill="#B8CBE7" if kind == "spotify" else "#596575")
@@ -202,7 +206,7 @@ def scene(kind: int, progress: float) -> Image.Image:
     brand_mark(draw, (54, 52), 1.1)
     label(draw, (54, 151), "Adufa", 40, TEXT, True)
     label(draw, (56, 203), "Every app. The right output.", 18, MUTED)
-    steps = ["Open from the tray", "Right-click an audible app", "Adjust volume", "Choose an output"]
+    steps = ["Open from the tray", "Right-click any running app", "Adjust volume", "Choose an output"]
     for i, step in enumerate(steps):
         yy = 292 + i*38
         active = i == kind
@@ -240,7 +244,7 @@ def closed_scene() -> Image.Image:
     brand_mark(draw, (54, 52), 1.1)
     label(draw, (54, 151), "Adufa", 40, TEXT, True)
     label(draw, (56, 203), "Every app. The right output.", 18, MUTED)
-    steps = ["Open from the tray", "Right-click an audible app", "Adjust volume", "Choose an output"]
+    steps = ["Open from the tray", "Right-click any running app", "Adjust volume", "Choose an output"]
     for i, step in enumerate(steps):
         yy = 292 + i*38
         draw.ellipse(((60-4)*SCALE, (yy+5-4)*SCALE, (60+4)*SCALE, (yy+5+4)*SCALE), fill=ACCENT if i == 3 else "#4F5967")

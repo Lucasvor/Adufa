@@ -77,7 +77,7 @@ fn open_run_key(
 }
 
 fn startup_command(executable: &Path) -> String {
-    format!("\"{}\"", executable.display())
+    format!("\"{}\" --minimized", executable.display())
 }
 
 #[cfg(test)]
@@ -88,7 +88,7 @@ mod tests {
     fn startup_command_quotes_paths_with_spaces() {
         assert_eq!(
             startup_command(Path::new(r"C:\Program Files\Adufa\Adufa.exe")),
-            r#""C:\Program Files\Adufa\Adufa.exe""#
+            r#""C:\Program Files\Adufa\Adufa.exe" --minimized"#
         );
     }
 }
